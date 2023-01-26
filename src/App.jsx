@@ -7,7 +7,7 @@ export default function App() {
   return (
     <div>
       <Navbar />
-      <News />
+      <News pageSize="20" country="in" category="sports" />
     </div>
   )
 }
