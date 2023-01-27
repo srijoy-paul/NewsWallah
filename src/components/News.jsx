@@ -19,7 +19,7 @@ export default function News(props) {
         // console.log(MY_API_KEY);
         async function fetchData() {
             setLoading(true);
-            const response = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&apiKey=${My_API_KEY}&page=${news.page}&pageSize=${props.pageSize}`);
+            const response = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${My_API_KEY}&page=${news.page}&pageSize=${props.pageSize}`);
             const parsedResponse = await response.json();
             console.log(parsedResponse);
             setLoading(false);
@@ -34,7 +34,7 @@ export default function News(props) {
 
     const onClickPgChange = async (e) => {
         setLoading(true);
-        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&apiKey=${My_API_KEY}&page=${e.target.id === "btnPrev" ? (news.page) - 1 : (news.page) + 1}&pageSize=${props.pageSize}`);
+        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${My_API_KEY}&page=${e.target.id === "btnPrev" ? (news.page) - 1 : (news.page) + 1}&pageSize=${props.pageSize}`);
         const parsedResponse = await response.json();
         console.log(parsedResponse);
         setLoading(false);
@@ -54,7 +54,7 @@ export default function News(props) {
             {loading && <Loader />}
             <div className='my-2 d-flex gap-3 flex-wrap justify-content-center'>
                 {!loading == true && (news.newsArticles) ? news.newsArticles.map((element) => {
-                    return <NewsItem imgUrl={element.urlToImage ? element.urlToImage : "https://www.ohsd.net/cms/lib/WA01919452/Centricity/Page/5501/news.jpg"} newsTitle={element.title} newsDesc={element.description} key={element.url} />
+                    return <NewsItem imgUrl={element.urlToImage ? element.urlToImage : "https://www.ohsd.net/cms/lib/WA01919452/Centricity/Page/5501/news.jpg"} newsTitle={element.title} newsDesc={element.description} key={element.url} author={element.author ? element.author : "Unknown"} publishinfo={new Date(element.publishedAt).toLocaleString()} />
                 }) : null}
             </div>
             <div className='container d-flex justify-content-between'>

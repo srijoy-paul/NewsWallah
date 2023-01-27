@@ -6,7 +6,8 @@ export default function NewsItem(props) {
             <img src={props.imgUrl} className="card-img-top" alt="..." />
             <div className="card-body">
                 <h6 className="card-title">{props.newsTitle}</h6>
-                <p className="card-text">{props.newsDesc}</p>
+                <p className="card-text fs-8">{props.newsDesc}</p>
+                <p className="card-text"><small className="text-muted">By {props.author} on {props.publishinfo}</small></p>
                 <a href="#" className="btn btn-dark">Read more</a>
             </div>
         </div>
