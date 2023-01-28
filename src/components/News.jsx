@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Loader from './Loader';
 import NewsItem from "./NewsItem";
-import InfiniteScroll from 'react-infinite-scroll-component';
 import Footer from './Footer';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 // const My_API_KEY = import.meta.env.REACT_APP_API_KEY;
 // const My_API_KEY = process.env.REACT_APP_API_KEY;
 // import { REACT_APP_API_KEY as My_API_KEY } from "process.env";
@@ -19,16 +20,20 @@ export default function News(props) {
     //useEffect is invoked each time the particular component re-renders.
     useEffect(() => {
         async function fetchData() {
+            props.setProgress(15);
             setLoading(true);
             const response = await fetch(`https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${My_API_KEY}&page=${news.page}&pageSize=${props.pageSize}`);
+            props.setProgress(40);
             const parsedResponse = await response.json();
             console.log(parsedResponse);
+            props.setProgress(80);
             setLoading(false);
             setNews({
                 newsArticles: parsedResponse.articles,
                 page: news.page,
                 totalResults: parsedResponse.totalResults,
             })
+            props.setProgress(100);
         }
         fetchData();
     }, []);
@@ -68,7 +73,7 @@ export default function News(props) {
                 loader={loading === false ? <Loader /> : null}>
                 <div className='my-2 d-flex gap-3 flex-wrap justify-content-center' style={{ minHeight: "100vh" }}>
                     {(news.newsArticles) ? news.newsArticles.map((element) => {
-                        return <NewsItem imgUrl={element.urlToImage ? element.urlToImage : "https://www.ohsd.net/cms/lib/WA01919452/Centricity/Page/5501/news.jpg"} newsTitle={element.title} newsDesc={element.description} key={element.url} author={element.author ? element.author : "Unknown"} publishinfo={new Date(element.publishedAt).toLocaleString()} />
+                        return <NewsItem source={element.source.name} imgUrl={element.urlToImage ? element.urlToImage : "https://www.ohsd.net/cms/lib/WA01919452/Centricity/Page/5501/news.jpg"} newsTitle={element.title} newsDesc={element.description} key={element.url} author={element.author ? element.author : "Unknown"} publishinfo={new Date(element.publishedAt).toLocaleString()} />
                     }) : null}
                 </div>
             </InfiniteScroll>
@@ -76,7 +81,7 @@ export default function News(props) {
                 <button disabled={news.page == 1} id='btnPrev' onClick={onClickPgChange} type="button" className="btn btn-dark">&larr; Previous</button>
                 <button disabled={news.page == Math.ceil(news.totalResults / props.pageSize)} id='btnNext' onClick={onClickPgChange} type="button" className="btn btn-dark">Next &rarr;</button>
             </div> */}
-            <Footer />
+
         </div>
     )
 }
